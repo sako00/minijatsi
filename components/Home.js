@@ -4,6 +4,7 @@ import styles from '../style/style';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Header from './Header';
 import Footer from './Footer';
+
 import {
     NBR_OF_DICES,
     NBR_OF_THROWS,
@@ -14,6 +15,8 @@ import {
 } from '../constants/Game';
 
 export default Home = ({ navigation }) => {
+
+    
 
     const [playerName, setPlayerName] = useState('');
     const [hasPlayerName, setHasPlayerName] = useState(false);
@@ -33,7 +36,7 @@ export default Home = ({ navigation }) => {
                 style={styles.infologo}
                     name='information'
                     size={70}
-                    color='steelblue'
+                    color='#d7b3d0'
                 />
                 {!hasPlayerName ?
                     <>
@@ -42,6 +45,7 @@ export default Home = ({ navigation }) => {
                             onChangeText={setPlayerName}
                             autoFocus={true} />
                         <Pressable
+                        style={{alignItems:'center'}}
                             onPress={() => handlePlayerName(playerName)}>
                             <Text style={styles.button} >OK</Text>
 
@@ -50,7 +54,7 @@ export default Home = ({ navigation }) => {
 
                     :
                     <>
-                        <Text style={styles.rulesheader}>Rules of game...</Text>
+                        <Text style={styles.rulesheader}>Rules of game</Text>
                         <Text multiline='true' style={styles.textline}>
                             THE GAME: Upper section of the classic Yahtzee
                             dice game. You have {NBR_OF_DICES} dices and
@@ -71,7 +75,7 @@ export default Home = ({ navigation }) => {
                             getting bonus which gives you {BONUS_POINTS}
                             points more.</Text>
                         <Text style={styles.textline}>Good luck, {playerName}</Text>
-                        <Pressable
+                        <Pressable style={{alignItems:'center'}}
                             onPress={() => navigation.navigate('Gameboard', { player: playerName })}>
                             <Text style={styles.button}>PLAY</Text>
                         </Pressable>

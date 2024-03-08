@@ -6,10 +6,14 @@ export default StyleSheet.create({
     backgroundColor: '#fff'
   },
   header: {
-    marginTop: 30,
+    
     marginBottom: 15,
     backgroundColor: '#b0b0f5',
     flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 10,
+    
+
   },
   rulesheader:{
     marginTop: 20,
@@ -30,6 +34,8 @@ export default StyleSheet.create({
     fontSize: 23,
     textAlign: 'center',
     margin: 10,
+    
+    
   },
   author: {
     color: '#fff',
@@ -42,14 +48,16 @@ export default StyleSheet.create({
   gameboard: {
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    
   },
   gameinfo: {
     backgroundColor: '#fff',
     textAlign: 'center',
     justifyContent: 'center',
     fontSize: 20,
-    marginTop: 10
+    marginTop: 10,
+    
   },
   infologo: {
     textAlign: 'center',
@@ -64,18 +72,19 @@ export default StyleSheet.create({
     flexDirection: "row"
   },
   button: {
-    flexDirection: "row",
+    
     padding: 10,
     backgroundColor: "#d7b3d0",
     width: 100,
     borderRadius: 15,
     textAlign: 'center',
     margin: 10,
-    
+        
   },
   buttonText: {
     color:"#8080d8",
-    fontSize: 20
+    fontSize: 20,
+    
   },
   textline: {
     margin: 2,

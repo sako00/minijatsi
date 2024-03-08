@@ -3,6 +3,7 @@ import styles from '../style/style';
 import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import Scoreboard from './Scoreboard';
 
 import {
   NBR_OF_DICES,
@@ -116,13 +117,13 @@ export default Gameboard = ({ navigation, route }) => {
 
   //call the function for calculating points inside text component 
   function getDiceColor(i) {
-    return selectedDices[i] ? 'black' : 'steelblue';
+    return selectedDices[i] ? 'black' : '#8e3b7e';
   }
 
   function getDicePointsColor(i) {
 
     return (selectedDicePoints[i] && !gameEndStatus)
-      ? 'black' : 'steelblue';
+      ? 'black' : 'skyblue';
   }
 
 
@@ -174,16 +175,29 @@ export default Gameboard = ({ navigation, route }) => {
   }
 
   const selectDicePoints = (i) => {
+    if (nbrOfThrowsLeft === 0) {
+    let selected = [...selectedDices];
     let selectedPoints = [...selectedDicePoints];
     let points = [...dicePointsTotal]
+    if (!selectedPoints[i]) {
     selectedPoints[i] = true;
 
     let nbrOfDices = diceSpots.reduce((total, x) => (x === (i + 1) ? total + 1 : total), 0);
     points[i] = nbrOfDices * (i + 1);
     setDicePointsTotal(points);
     setSelectedDicePoints(selectedPoints);
+    setNbrOfThrowsLeft(NBR_OF_THROWS);
     return points[i];
+    }
+    else {
+      setStatus('You have already selected points for ' + (i + 1));
+    }
   }
+  else {
+    setStatus("Throw " + NBR_OF_THROWS + " times before setting points");
+  }
+}
+
   const calculateTotalPoints = () => {
     let totalPoints = 0;
     dicePointsTotal.forEach(points => {
@@ -245,6 +259,8 @@ export default Gameboard = ({ navigation, route }) => {
     bonusMessage = `You are ${pointsNeededForBonus} points away from bonus.`;
   }
 
+  
+
 
 
   return (
@@ -252,7 +268,7 @@ export default Gameboard = ({ navigation, route }) => {
       <Header />
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         {showIcon && (
-          <MaterialCommunityIcons name="dice-multiple" size={80} color="#8c1ae3fe" />)}
+          <MaterialCommunityIcons name="dice-multiple" size={80} color="#d7b3d0" />)}
         <Container fluid>
           <Row>{dicesRow}</Row>
         </Container>
@@ -264,7 +280,7 @@ export default Gameboard = ({ navigation, route }) => {
         <Container fluid>
           <Row>{pointsToSelectRow}</Row>
         </Container>
-        <Pressable onPress={() => throwDices()}>
+        <Pressable style={{alignItems:'center'}} onPress={() => throwDices()}>
           <Text style={styles.button}>Throw Dices</Text>
           <Text>Total: {calculateTotalPoints()}</Text>
           <Text>{bonusMessage}</Text>
