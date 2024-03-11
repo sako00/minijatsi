@@ -114,7 +114,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     textAlign: 'center',
     fontFamily: 'Ojuju',
-    color: '#060017',
+    color: '#000000',
     fontSize: 20,
   }
   

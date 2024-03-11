@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { useFonts } from 'expo-font';
-import Scoreboard from './Scoreboard';
 
 import {
   NBR_OF_DICES,
@@ -17,12 +16,7 @@ import {
 import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-
-
-
 let board = [];
-
-
 
 export default Gameboard = ({ navigation, route }) => {
 
@@ -56,7 +50,7 @@ export default Gameboard = ({ navigation, route }) => {
   const [dicePointsTotal, setDicePointsTotal] =
     useState(new Array(MAX_SPOT).fill(0));
 
-    
+
 
 
   //this is one way to create the player name and set it to the state
@@ -230,26 +224,27 @@ export default Gameboard = ({ navigation, route }) => {
     }
   }
 
-  // Function to calculate the total points
   const calculateTotalPoints = () => {
     let totalPoints = 0;
     dicePointsTotal.forEach(points => {
       totalPoints += points;
     });
 
-    // Check if the player has at least 63 points in categories 1 through 6
     const pointsInCategories1To6 = [1, 2, 3, 4, 5, 6].reduce((total, category) => {
       return total + calculateCategoryPoints(category);
     }, 0);
 
     let bonusPoints = 0;
-    if (pointsInCategories1To6 >= BONUS_POINTS_LIMIT) {
+    if (pointsInCategories1To6 >= BONUS_POINTS_LIMIT && !bonusAwarded) {
       bonusPoints = BONUS_POINTS;
-      totalPoints += bonusPoints;
+      totalPoints += bonusPoints; // Adding bonus points to total
+      setStatus('Congratulations! Bonus points (50) added.'); // Update status to notify user
+      setBonusAwarded(true); // Mark bonus as awarded
     }
 
     return totalPoints;
   }
+
 
 
   // Function to handle selecting points
@@ -293,11 +288,14 @@ export default Gameboard = ({ navigation, route }) => {
   let bonusMessage = '';
 
   // Check if the player is eligible for the bonus
-  if (pointsNeededForBonus > 0) {
+  if (pointsNeededForBonus > 0 && !bonusAwarded) {
     bonusMessage = `You are ${pointsNeededForBonus} points away from bonus.`;
+  } else if (bonusAwarded) {
+    bonusMessage = 'Bonus points (50) awarded!';
   }
 
-  
+
+
 
 
 
@@ -322,10 +320,6 @@ export default Gameboard = ({ navigation, route }) => {
         <Pressable style={{ alignItems: 'center' }} onPress={() => throwDices()}>
           <Text style={styles.button}>Throw Dices</Text>
           <Text>Total: {calculateTotalPoints()}</Text>
-
-
-
-
           <Text>{bonusMessage}</Text>
           <Container fluid>
             <Row>
@@ -339,24 +333,16 @@ export default Gameboard = ({ navigation, route }) => {
             </Row>
           </Container>
           {gameEndStatus && allPointsSelected && (
-            
             <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>
               Game Over - All points selected!
             </Text>
-            
-         
-          
-          
           )}
         </Pressable>
-        
-
-        <Text>Player: {playerName}</Text>
-      
+       
       </View>
-      <Footer />
-  
+ 
 
+      <Footer />
     </>
   )
 }
