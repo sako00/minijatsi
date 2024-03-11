@@ -106,6 +106,16 @@ export default StyleSheet.create({
     padding: 10,
     borderColor: 'black',
     borderWidth: 1
+  },
+  textscores:{
+    margin: 2,
+    padding: 5,
+   alignContent: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    fontFamily: 'Ojuju',
+    color: '#060017',
+    fontSize: 20,
   }
   
  
