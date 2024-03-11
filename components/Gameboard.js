@@ -3,6 +3,7 @@ import styles from '../style/style';
 import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import { useFonts } from 'expo-font';
 import Scoreboard from './Scoreboard';
 
 import {
@@ -17,9 +18,21 @@ import { Container, Row, Col } from 'react-native-flex-grid';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 
+
+
 let board = [];
 
+
+
 export default Gameboard = ({ navigation, route }) => {
+
+  const [loaded] = useFonts({
+    Ojuju: require('../font/Ojuju-VariableFont_wght.ttf')
+  });
+
+  if (!loaded) {
+    return null;
+  }
 
   const [playerName, setPlayerName] = useState('');
   const [nbrOfThrowsLeft, setNbrOfThrowsLeft] = useState(NBR_OF_THROWS);
@@ -27,6 +40,9 @@ export default Gameboard = ({ navigation, route }) => {
   const [gameEndStatus, setGameEndStatus] = useState(false);
   const [showIcon, setShowIcon] = useState(true); // State to manage icon visibility
   const [totalPoints, setTotalPoints] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [bonusAwarded, setBonusAwarded] = useState(false);
+  const [allPointsSelected, setAllPointsSelected] = useState(false);
 
   const [selectedDices, setSelectedDices] =
     useState(new Array(NBR_OF_DICES).fill(false));
@@ -40,6 +56,7 @@ export default Gameboard = ({ navigation, route }) => {
   const [dicePointsTotal, setDicePointsTotal] =
     useState(new Array(MAX_SPOT).fill(0));
 
+    
 
 
   //this is one way to create the player name and set it to the state
@@ -48,16 +65,31 @@ export default Gameboard = ({ navigation, route }) => {
       setPlayerName(route.params.player);
     }
 
-
   }, []);
 
+  useEffect(() => {
+    checkGameEnd();
+  }, [selectedCategories]);
 
-  //this useEffect will be used to reading scoreboards from the local storage
+  useEffect(() => {
+    checkAllPointsSelected();
+  }, [selectedDicePoints]);
 
-  //this useEffect will be handling the gameflow and checking the game status that it dont stop too early
-  //and also checking the game status that it dont stop too early
-  //trigger the game end status when the game is over
+  // Function to check if the game has ended
+  const checkGameEnd = () => {
+    if (selectedCategories.length === MAX_SPOT && nbrOfThrowsLeft === 0) {
+      setGameEndStatus(true);
+    }
+  }
 
+  // Function to check if all points 1 through 6 have been selected
+  const checkAllPointsSelected = () => {
+    const allPointsSelected = selectedDicePoints.every(point => point);
+    setAllPointsSelected(allPointsSelected);
+    if (allPointsSelected) {
+      setGameEndStatus(true);
+    }
+  }
 
   const dicesRow = [];
   for (let dice = 0; dice < NBR_OF_DICES; dice++) {
@@ -176,36 +208,49 @@ export default Gameboard = ({ navigation, route }) => {
 
   const selectDicePoints = (i) => {
     if (nbrOfThrowsLeft === 0) {
-    let selected = [...selectedDices];
-    let selectedPoints = [...selectedDicePoints];
-    let points = [...dicePointsTotal]
-    if (!selectedPoints[i]) {
-    selectedPoints[i] = true;
+      let selected = [...selectedDices];
+      let selectedPoints = [...selectedDicePoints];
+      let points = [...dicePointsTotal]
+      if (!selectedPoints[i]) {
+        selectedPoints[i] = true;
 
-    let nbrOfDices = diceSpots.reduce((total, x) => (x === (i + 1) ? total + 1 : total), 0);
-    points[i] = nbrOfDices * (i + 1);
-    setDicePointsTotal(points);
-    setSelectedDicePoints(selectedPoints);
-    setNbrOfThrowsLeft(NBR_OF_THROWS);
-    return points[i];
+        let nbrOfDices = diceSpots.reduce((total, x) => (x === (i + 1) ? total + 1 : total), 0);
+        points[i] = nbrOfDices * (i + 1);
+        setDicePointsTotal(points);
+        setSelectedDicePoints(selectedPoints);
+        setNbrOfThrowsLeft(NBR_OF_THROWS);
+        return points[i];
+      }
+      else {
+        setStatus('You have already selected points for ' + (i + 1));
+      }
     }
     else {
-      setStatus('You have already selected points for ' + (i + 1));
+      setStatus("Throw " + NBR_OF_THROWS + " times before setting points");
     }
   }
-  else {
-    setStatus("Throw " + NBR_OF_THROWS + " times before setting points");
-  }
-}
 
+  // Function to calculate the total points
   const calculateTotalPoints = () => {
     let totalPoints = 0;
     dicePointsTotal.forEach(points => {
       totalPoints += points;
-    })
-    return totalPoints;
+    });
 
+    // Check if the player has at least 63 points in categories 1 through 6
+    const pointsInCategories1To6 = [1, 2, 3, 4, 5, 6].reduce((total, category) => {
+      return total + calculateCategoryPoints(category);
+    }, 0);
+
+    let bonusPoints = 0;
+    if (pointsInCategories1To6 >= BONUS_POINTS_LIMIT) {
+      bonusPoints = BONUS_POINTS;
+      totalPoints += bonusPoints;
+    }
+
+    return totalPoints;
   }
+
 
   // Function to handle selecting points
   const selectPointsCategory = (category) => {
@@ -239,14 +284,7 @@ export default Gameboard = ({ navigation, route }) => {
     return categoryPoints;
   }
 
-  // Function to check if the game has ended
-  const checkGameEnd = () => {
-    // Check if all categories have been selected or if the player decides to end the game
-    if (selectedCategories.length === MAX_SPOT || playerDecidesToEnd) {
-      setGameEndStatus(true);
-      // Display game end message or navigate to end screen
-    }
-  }
+
 
   // Calculate the points needed for the bonus
   const pointsNeededForBonus = BONUS_POINTS_LIMIT - calculateTotalPoints();
@@ -260,6 +298,7 @@ export default Gameboard = ({ navigation, route }) => {
   }
 
   
+
 
 
 
@@ -280,9 +319,13 @@ export default Gameboard = ({ navigation, route }) => {
         <Container fluid>
           <Row>{pointsToSelectRow}</Row>
         </Container>
-        <Pressable style={{alignItems:'center'}} onPress={() => throwDices()}>
+        <Pressable style={{ alignItems: 'center' }} onPress={() => throwDices()}>
           <Text style={styles.button}>Throw Dices</Text>
           <Text>Total: {calculateTotalPoints()}</Text>
+
+
+
+
           <Text>{bonusMessage}</Text>
           <Container fluid>
             <Row>
@@ -295,14 +338,25 @@ export default Gameboard = ({ navigation, route }) => {
               ))}
             </Row>
           </Container>
-          <Text>{gameEndStatus ? 'Game Over!' : ''}</Text>
-
+          {gameEndStatus && allPointsSelected && (
+            
+            <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>
+              Game Over - All points selected!
+            </Text>
+            
+         
+          
+          
+          )}
         </Pressable>
-
+        
 
         <Text>Player: {playerName}</Text>
+      
       </View>
       <Footer />
+  
+
     </>
   )
 }

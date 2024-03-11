@@ -35,13 +35,13 @@ export default Home = ({ navigation }) => {
                 <MaterialCommunityIcons
                 style={styles.infologo}
                     name='information'
-                    size={70}
+                    size={55}
                     color='#d7b3d0'
                 />
                 {!hasPlayerName ?
                     <>
-                        <Text >For scoreboard enter your name</Text>
-                        <TextInput
+                        <Text style={{textAlign:'center'}}>For scoreboard enter your name</Text>
+                        <TextInput style={styles.input}
                             onChangeText={setPlayerName}
                             autoFocus={true} />
                         <Pressable

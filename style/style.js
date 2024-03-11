@@ -19,8 +19,9 @@ export default StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     fontSize: 25,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: 'Ojuju',
+    color: '#09021c'
   },
   footer: {
     marginTop: 20,
@@ -38,12 +39,12 @@ export default StyleSheet.create({
     
   },
   author: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "black",
     flex: 1,
     fontSize: 15,
     textAlign: 'center',
     margin: 10,
+    fontFamily: 'Ojuju'
   },
   gameboard: {
     backgroundColor: '#fff',
@@ -92,9 +93,20 @@ export default StyleSheet.create({
    alignContent: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    borderTopWidth: 1,
+    borderTopWidth: 0.2,
+    fontFamily: 'Ojuju',
+    color: '#060017',
+    
   
   },
+  input:{
+    textAlign:'center', 
+    fontSize: 20, 
+    margin: 10, 
+    padding: 10,
+    borderColor: 'black',
+    borderWidth: 1
+  }
   
  
     
