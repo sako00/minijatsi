@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import { useFonts } from 'expo-font';
-
 import {
   NBR_OF_DICES,
   NBR_OF_THROWS,
@@ -338,11 +337,8 @@ export default Gameboard = ({ navigation, route }) => {
             </Text>
           )}
         </Pressable>
-       
-      </View>
- 
-
-      <Footer />
+       </View>
+     <Footer />
     </>
   )
 }
