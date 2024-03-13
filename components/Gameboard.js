@@ -337,8 +337,8 @@ export default Gameboard = ({ navigation, route }) => {
             </Text>
           )}
         </Pressable>
-       </View>
-     <Footer />
+      </View>
+      <Footer />
     </>
   )
 }
