@@ -165,6 +165,13 @@ export default Gameboard = ({ navigation, route }) => {
     }
 
   }
+
+  const resetGame = () => {
+    setSelectedCategories([]);
+    setSelectedDicePoints(new Array(MAX_SPOT).fill(false));
+    setGameEndStatus(false);
+  };
+
   const throwDices = () => {
     setShowIcon(false);
     if (nbrOfThrowsLeft === 0 && !gameEndStatus) {
@@ -191,7 +198,8 @@ export default Gameboard = ({ navigation, route }) => {
     setDiceSpots(spots);
     setStatus('Select and throw dices again');
 
-  }
+  } 
+  
 
 
   function getSpotTotal(i) {
@@ -293,6 +301,14 @@ export default Gameboard = ({ navigation, route }) => {
     bonusMessage = 'Bonus points (50) awarded!';
   }
 
+  // Navigate to the Scoreboard component with player's name and total points
+  const navigateToScoreboard = () => {
+    navigation.navigate('Scoreboard', {
+      playerName: playerName,
+      totalPoints: calculateTotalPoints()
+    });
+  }
+
 
 
 
@@ -336,6 +352,9 @@ export default Gameboard = ({ navigation, route }) => {
               Game Over - All points selected!
             </Text>
           )}
+        </Pressable>
+        <Pressable onPress={() => navigateToScoreboard()}>
+          <Text style={styles.button}>Go to Scoreboard</Text>
         </Pressable>
       </View>
       <Footer />
