@@ -71,9 +71,11 @@ export default Gameboard = ({ navigation, route }) => {
   // Function to check if the game has ended
   const checkGameEnd = () => {
     if (selectedCategories.length === MAX_SPOT && nbrOfThrowsLeft === 0) {
+      navigateToScoreboard();
       setGameEndStatus(true);
     }
   }
+  
 
   // Function to check if all points 1 through 6 have been selected
   const checkAllPointsSelected = () => {
