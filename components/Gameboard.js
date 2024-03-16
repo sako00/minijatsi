@@ -165,13 +165,6 @@ export default Gameboard = ({ navigation, route }) => {
     }
 
   }
-
-  const resetGame = () => {
-    setSelectedCategories([]);
-    setSelectedDicePoints(new Array(MAX_SPOT).fill(false));
-    setGameEndStatus(false);
-  };
-
   const throwDices = () => {
     setShowIcon(false);
     if (nbrOfThrowsLeft === 0 && !gameEndStatus) {
@@ -198,8 +191,7 @@ export default Gameboard = ({ navigation, route }) => {
     setDiceSpots(spots);
     setStatus('Select and throw dices again');
 
-  } 
-  
+  }
 
 
   function getSpotTotal(i) {
