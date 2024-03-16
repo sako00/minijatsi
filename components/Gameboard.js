@@ -303,6 +303,28 @@ export default Gameboard = ({ navigation, route }) => {
     });
   }
 
+  // Function to reset the game state
+  const resetGame = () => {
+    setPlayerName(''); // Reset player name
+    setNbrOfThrowsLeft(NBR_OF_THROWS); // Reset throws left
+    setStatus('Throw dices'); // Reset status
+    setGameEndStatus(false); // Reset game end status
+    setShowIcon(true); // Reset icon visibility
+    setTotalPoints(0); // Reset total points
+    setSelectedCategories([]); // Reset selected categories
+    setBonusAwarded(false); // Reset bonus awarded status
+    setAllPointsSelected(false); // Reset all points selected status
+    setSelectedDices(new Array(NBR_OF_DICES).fill(false)); // Reset selected dices
+    setDiceSpots(new Array(NBR_OF_DICES).fill(0)); // Reset dice spots
+    setSelectedDicePoints(new Array(MAX_SPOT).fill(false)); // Reset selected dice points
+    setDicePointsTotal(new Array(MAX_SPOT).fill(0)); // Reset dice points total
+  };
+
+  // Function to start a new game
+  const startNewGame = () => {
+    resetGame(); // Reset game state
+    // Any other initialization logic...
+  };
 
 
 
@@ -350,6 +372,10 @@ export default Gameboard = ({ navigation, route }) => {
         <Pressable onPress={() => navigateToScoreboard()}>
           <Text style={styles.button}>Go to Scoreboard</Text>
         </Pressable>
+        <Pressable onPress={startNewGame}>
+  <Text style={styles.button}>Start New Game</Text>
+</Pressable>
+
       </View>
       <Footer />
     </>
